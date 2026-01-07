@@ -1,17 +1,18 @@
-mysql> DELIMITER //
-mysql>
-mysql> CREATE PROCEDURE sp_rekam_medis_hewan(IN p_id_periksa INT)
-    -> BEGIN
-    ->     SELECT
-    ->         id_rekam,
-    ->         id_periksa,
-    ->         tanggal_periksa,
-    ->         diagnosis,
-    ->         tindakan
-    ->     FROM rekam_medis
-    ->     WHERE id_periksa = p_id_periksa;
-    -> END //
-Query OK, 0 rows affected (0.293 sec)
+-- Function: Hitung Total Biaya
+DELIMITER //
 
-mysql>
-mysql> DELIMITER ;
+CREATE FUNCTION fn_total_biaya(p_id_rekam INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE total INT;
+
+    SELECT SUM(biaya)
+    INTO total
+    FROM detail_perawatan
+    WHERE id_rekam = p_id_rekam;
+
+    RETURN total;
+END //
+
+DELIMITER ;
